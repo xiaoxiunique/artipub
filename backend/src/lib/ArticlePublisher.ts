@@ -39,6 +39,7 @@ export default class ArticlePublisher extends BaseExecutor {
         }
       } catch (e) {
         task.status = constants.status.ERROR
+        // @ts-ignore
         task.error = e.toString()
         await task.save()
         logger.error(e)

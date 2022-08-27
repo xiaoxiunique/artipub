@@ -8,7 +8,7 @@ const router = Router();
 const getArticleList = async (req, res) => {
     const articles = await Article.find({user: req.user._id}).sort({ _id: -1 })
     for (let i = 0; i < articles.length; i++) {
-      const article = articles[i] 
+      const article = articles[i]
       article.tasks = await Task.find({ articleId: article._id })
       const arr = ['readNum', 'likeNum', 'commentNum']
       arr.forEach(key => {

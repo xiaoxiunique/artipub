@@ -90,9 +90,9 @@ export default class BaseSpider {
       //如果是访问https页面 此属性会忽略https错误
       ignoreHTTPSErrors: true,
       // 打开开发者工具, 当此值为true时, headless总为false
-      devtools: false,
+      devtools: true,
       // 关闭headless模式, 不会打开浏览器
-      headless: enableChromeDebug !== "Y",
+      headless: false,
       args: ["--no-sandbox", '--start-maximized'],
       defaultViewport: null,
 
@@ -121,10 +121,10 @@ export default class BaseSpider {
       richText: `<br><b>本篇文章由一文多发平台<a href="https://github.com/crawlab-team/artipub" target="_blank">ArtiPub</a>自动发布</b>`,
     };
   }
- 
+
   /**
    * 返回拼接头尾部模版后，实际发到平台的最终内容
-   * @returns 
+   * @returns
    */
   getFinalContent(): string {
     return '';
@@ -239,6 +239,8 @@ export default class BaseSpider {
    * 输入文章内容
    */
   async inputContent(realContent: string, editorSel: { content: string; }) {
+    // log function params
+    logger.info(`inputContent: ${realContent}, ${editorSel.content}`);
     const el = document.querySelector(editorSel.content) as HTMLPreElement;
     el.focus();
     try {
@@ -275,7 +277,7 @@ export default class BaseSpider {
    */
 
   async inputEditor() {
-    logger.info(`input editor title`);
+    logger.info(`input editor title, ${JSON.stringify(this.editorSel)}`);
     // 输入标题
     await this.page.evaluate(
       this.inputTitle,
@@ -284,8 +286,9 @@ export default class BaseSpider {
       this.task as any
     );
 
+    // await this.page.waitForTimeout(300000);
     // 输入内容
-    logger.info(`input editor  content`);
+    logger.info(`input editor  content, ${JSON.stringify(this.editorSel)}`);
     await this.page.evaluate(this.inputContent, this.article as any, this.editorSel);
     await this.page.waitForTimeout(3000);
 

@@ -11,7 +11,7 @@ export default {
     },
     editorSel: {
       title: ".title-input",
-      content: ".CodeMirror",
+      content: ".medium-editor-element",
       publish: ".footer  button:nth-child(2)",
     },
     publishNavigationChange: true,

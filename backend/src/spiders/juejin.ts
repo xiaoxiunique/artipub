@@ -8,9 +8,11 @@ export default class JuejinSpider extends BaseSpider {
   async inputContent(article, editorSel) {
     const footerContent = `\n\n> 本篇文章由一文多发平台[ArtiPub](https://github.com/crawlab-team/artipub)自动发布`
     const content = article.content + footerContent
-    const el = document.querySelector('.CodeMirror')
+    const el = document.querySelector('.medium-editor-element')
+    console.log(el)
     //@ts-ignore
-    el.CodeMirror.setValue(content)
+    // el.setValue(content)
+    el.innerHTML = content;
   }
 
   async inputFooter(article, editorSel) {
@@ -41,7 +43,7 @@ export default class JuejinSpider extends BaseSpider {
     );
 
     logger.info(this.task.tag)
-    await this.page.keyboard.type(this.task.tag, { delay: 100 }); // Types slower, like a user
+    await this.page.keyboard.type(this.task.tag, { delay: 500 }); // Types slower, like a user
 
     await this.page.waitForSelector(
       "body > .byte-select-dropdown > .byte-select-dropdown__wrap > .byte-select-option--hover"
@@ -51,6 +53,9 @@ export default class JuejinSpider extends BaseSpider {
     );
     //要等会才能点按钮, 选择完标签后，发布按钮会变成disabled,然后又马上变回可以点击
     await this.page.waitForTimeout(1000)
+
+    await this.page.click(".byte-input__textarea");
+    await this.page.keyboard.type("asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf", { delay: 50 }); // Types slower, like a user
   }
 
   async afterPublish() {
